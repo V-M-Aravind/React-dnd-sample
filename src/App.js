@@ -14,8 +14,23 @@ function App() {
     { name: 'card 5', column: 1 },
   ];
   const [list, setList] = useState(data);
-  const itemList = (flag) => {
-    return list?.filter((p) => p.column === flag);
+
+  const sortHandler = (dragIndex, hoverIndex) => {
+    const dragItem = list[dragIndex];
+    // console.log(
+    //   `dragindex ${dragIndex} hoverindex ${hoverIndex} dragItem ${dragItem}`
+    // );
+    if (dragItem) {
+      setList((prevState) => {
+        const copyPrevState = prevState;
+        // console.log(copyPrevState);
+        const hoverItem = copyPrevState.splice(hoverIndex, 1, dragItem);
+        //console.log(copyPrevState);
+        copyPrevState.splice(dragIndex, 1, hoverItem[0]);
+        //console.log(copyPrevState);
+        return copyPrevState;
+      });
+    }
   };
   return (
     <div>
@@ -23,14 +38,35 @@ function App() {
       <DndProvider backend={HTML5Backend}>
         <div className='container'>
           <Column title='first-column'>
-            {itemList(1)?.map((p) => (
-              <MovableItem title={p.name} key={p.name} setList={setList} />
-            ))}
+            {/* {itemList(1)?.map((p, index) => ( */}
+            {list.map((p, index) =>
+              p.column === 1 ? (
+                <MovableItem
+                  title={p.name}
+                  key={p.name}
+                  setList={setList}
+                  sortHandler={sortHandler}
+                  index={index}
+                />
+              ) : (
+                ''
+              )
+            )}
           </Column>
           <Column title='second-column'>
-            {itemList(2)?.map((p) => (
-              <MovableItem title={p.name} key={p.name} setList={setList} />
-            ))}
+            {list.map((p, index) =>
+              p.column === 2 ? (
+                <MovableItem
+                  title={p.name}
+                  key={p.name}
+                  setList={setList}
+                  sortHandler={sortHandler}
+                  index={index}
+                />
+              ) : (
+                ''
+              )
+            )}
           </Column>
         </div>
       </DndProvider>

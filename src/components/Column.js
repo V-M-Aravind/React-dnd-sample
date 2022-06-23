@@ -12,9 +12,9 @@ const Column = ({ children, title }) => {
       canDrop: monitor.canDrop(),
     }),
   }));
-
+  const highlight = isOver ? 'highlight' : title;
   return (
-    <div className={`column ${title}`} ref={drop}>
+    <div className={`column ${highlight}`} ref={drop}>
       <h3>{title}</h3>
       {children}
     </div>
