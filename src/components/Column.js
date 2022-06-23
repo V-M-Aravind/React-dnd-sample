@@ -1,12 +1,12 @@
 import React from 'react';
 import { useDrop } from 'react-dnd/dist/hooks';
 
-const Column = ({ children, title }) => {
+const Column = ({ children, title, onDrop }) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: 'movable',
-    drop: () => ({
-      name: title,
-    }),
+    drop: (item, monitor) => {
+      onDrop(title, item, monitor);
+    },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),

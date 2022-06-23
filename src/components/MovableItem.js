@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd/dist/hooks';
 
-const MovableItem = ({ title, setList, sortHandler, index }) => {
+const MovableItem = ({ name, setList, sortHandler, index }) => {
   const movableRef = useRef(null);
   const [, drop] = useDrop({
     accept: 'movable',
@@ -44,22 +44,10 @@ const MovableItem = ({ title, setList, sortHandler, index }) => {
       item.index = hoverIndex;
     },
   });
-  const movingHanlder = (colNo, item) => {
-    setList((p) =>
-      p.map((l) => (l.name === item.title ? { ...l, column: colNo } : l))
-    );
-  };
+
   const [collected, drag] = useDrag(() => ({
     type: 'movable',
-    item: { title, index },
-    end: (item, monitor) => {
-      const dropResult = monitor.getDropResult();
-      if (dropResult && dropResult.name === 'first-column') {
-        movingHanlder(1, item);
-      } else {
-        movingHanlder(2, item);
-      }
-    },
+    item: { name, index },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -71,7 +59,7 @@ const MovableItem = ({ title, setList, sortHandler, index }) => {
       style={{ opacity: collected.isDragging ? 0 : 1 }}
       ref={movableRef}
     >
-      {title}
+      {name}
     </div>
   );
 };

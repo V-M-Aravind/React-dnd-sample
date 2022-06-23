@@ -14,7 +14,17 @@ function App() {
     { name: 'card 5', column: 1 },
   ];
   const [list, setList] = useState(data);
-
+  const onDrop = (columnName, item, monitor) => {
+    if (columnName === 'first-column') {
+      setList((p) =>
+        p.map((l) => (l.name === item.name ? { ...l, column: 1 } : l))
+      );
+    } else {
+      setList((p) =>
+        p.map((l) => (l.name === item.name ? { ...l, column: 2 } : l))
+      );
+    }
+  };
   const sortHandler = (dragIndex, hoverIndex) => {
     const dragItem = list[dragIndex];
     // console.log(
@@ -37,12 +47,12 @@ function App() {
       <h2>DND Sample</h2>
       <DndProvider backend={HTML5Backend}>
         <div className='container'>
-          <Column title='first-column'>
+          <Column title='first-column' onDrop={onDrop}>
             {/* {itemList(1)?.map((p, index) => ( */}
             {list.map((p, index) =>
               p.column === 1 ? (
                 <MovableItem
-                  title={p.name}
+                  name={p.name}
                   key={p.name}
                   setList={setList}
                   sortHandler={sortHandler}
@@ -53,11 +63,11 @@ function App() {
               )
             )}
           </Column>
-          <Column title='second-column'>
+          <Column title='second-column' onDrop={onDrop}>
             {list.map((p, index) =>
               p.column === 2 ? (
                 <MovableItem
-                  title={p.name}
+                  name={p.name}
                   key={p.name}
                   setList={setList}
                   sortHandler={sortHandler}
